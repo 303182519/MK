@@ -3,6 +3,7 @@
  */
 
 import Geometry from '../../geometry/geometry'
+import MultiPolygon from '../../geometry/mutilpolygon'
 import {linearRingIsClockwise} from '../support/orient'
 import contains from './contains'
 
@@ -64,6 +65,25 @@ export default function polygonWithHoles (polygon1, polygon2) {
         }
       }
     }
+  } else if (type === Geometry.MULTI_POLYGON) {
+    const polygons = polygon.convertToPolygons()
+
+    const polygonsWithHole = []
+
+    polygons.forEach(poly => {
+      const polyWithHole = polygonWithHoles(poly, holePolygon)
+      polygonsWithHole.push(polyWithHole)
+    })
+
+    const coordinates = []
+    polygonsWithHole.forEach(poly => {
+      coordinates.push(poly.getCoordinates())
+    })
+
+    const multiPolygon = new MultiPolygon()
+    multiPolygon.setCoordinates(coordinates)
+
+    resultPolygon = multiPolygon
   }
   
   return resultPolygon

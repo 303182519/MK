@@ -1,12 +1,12 @@
 window.onload = function () {
   
-  var flayer = new Datatang.FeatureLayer()
+  var flayer = new mk.FeatureLayer()
   
   var extent = [0, 0, 2783, 2125];
   
-  var map = new Datatang.Map({
+  var map = new mk.Map({
     layers: [
-      new Datatang.SingleImageLayer({
+      new mk.SingleImageLayer({
         url: 'source/China_map.jpg',
         imageExtent: extent,
         projection: {
@@ -16,18 +16,18 @@ window.onload = function () {
       flayer
     ],
     target: 'map',
-    view: new Datatang.View({
+    view: new mk.View({
       projection: {
         extent: extent
       },
-      center: Datatang.ExtentUtil.getCenter(extent),
+      center: mk.ExtentUtil.getCenter(extent),
       resolution: 2,
       resolutions: [4,2,1,0.5,0.25,0.125, 0.0625, 0.03125]
     })
   });
   
   // 绘图工具
-  var drawTool = new Datatang.Draw({
+  var drawTool = new mk.Draw({
     type: 'line',
     drawLayer: flayer,
     freehand: true,
@@ -52,7 +52,7 @@ window.onload = function () {
     select.active = false
   }
   
-  drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(e){
+  drawTool.addEventListener(mk.DrawEvent.EventType.DRAW_END, function(e){
     var feature = e.feature
     feature.displayText = '测试测试'
     
@@ -61,14 +61,14 @@ window.onload = function () {
     modifyTool.active = true
   })
   
-  var select = new Datatang.Select()
+  var select = new mk.Select()
   select.selectMode = 'mousemove'
   
-  var modifyTool = new Datatang.Modify()
+  var modifyTool = new mk.Modify()
   modifyTool.features = flayer.features
   
   // add select-end event linstener
-  // select.addEventListener(Datatang.SelectEvent.EventType.SELECT, function(event) {
+  // select.addEventListener(mk.SelectEvent.EventType.SELECT, function(event) {
   //   modifyTool.features = event.selectedFeatures
   // })
   

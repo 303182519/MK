@@ -1,11 +1,11 @@
 
-var featureLayer = new Datatang.FeatureLayer()
+var featureLayer = new mk.FeatureLayer()
 
 // 初始化map、view和layer
 var mapextent = [0, 0, 2783, 2125];
-var map = new Datatang.Map({
+var map = new mk.Map({
   layers: [
-    new Datatang.SingleImageLayer({
+    new mk.SingleImageLayer({
       url: 'source/China_map.jpg',
       imageExtent: mapextent,
       projection: {
@@ -15,11 +15,11 @@ var map = new Datatang.Map({
     featureLayer
   ],
   target: 'map',
-  view: new Datatang.View({
+  view: new mk.View({
     projection: {
       extent: mapextent
     },
-    center: Datatang.ExtentUtil.getCenter(mapextent),
+    center: mk.ExtentUtil.getCenter(mapextent),
     zoom: 2,
     maxZoom: 8
   })
@@ -41,11 +41,11 @@ typeSelect.onchange = function() {
   }
 }
 
-var features = Datatang.GeoJSON.read(exampleJSON())
+var features = mk.GeoJSON.read(exampleJSON())
 featureLayer.addFeatures(features)
 
 // 绘图工具
-var draw = new Datatang.Draw({
+var draw = new mk.Draw({
   type: 'line',
   drawLayer: featureLayer,
   finishCondition: function(event) {
@@ -53,15 +53,15 @@ var draw = new Datatang.Draw({
   }
 })
 
-var select = new Datatang.Select({
-  selectMode: Datatang.BrowserEvent.MOUSE_MOVE
+var select = new mk.Select({
+  selectMode: mk.BrowserEvent.MOUSE_MOVE
 })
 
 map.addComponents(select)
 map.addComponents(draw)
 
 
-draw.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEvent){
+draw.addEventListener(mk.DrawEvent.EventType.DRAW_END, function(drawEvent){
   var linefeature = drawEvent.feature
   
   var intersects = getIntersectedGeometry(linefeature.geometry)
@@ -74,7 +74,7 @@ draw.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEvent)
   var splitedFeature = intersects[0]
   var splitedPolygon = splitedFeature.geometry
   
-  var featureCollection = Datatang.splitPolygonByPolyline(splitedPolygon, linefeature.geometry)
+  var featureCollection = mk.splitPolygonByPolyline(splitedPolygon, linefeature.geometry)
   
   if (featureCollection.length === 0) {
     alert('分割失败，请重新分割！')
@@ -86,7 +86,7 @@ draw.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEvent)
   
   var splitFeatures = []
   featureCollection.forEach(function(polygon){
-    splitFeatures.push(new Datatang.Feature(polygon))
+    splitFeatures.push(new mk.Feature(polygon))
   })
   
   featureLayer.addFeatures(splitFeatures)
@@ -98,7 +98,7 @@ draw.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEvent)
 function getIntersectedGeometry (geometry) {
   var features = featureLayer.features
   var filters = features.filter( function(feature) {
-    return feature.geometry.id !== geometry.id && Datatang.intersects(geometry, feature.geometry)
+    return feature.geometry.id !== geometry.id && mk.intersects(geometry, feature.geometry)
   })
   
   return filters

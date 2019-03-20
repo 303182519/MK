@@ -83,9 +83,9 @@ export default class LineRender extends GeometryRender {
   
     ctx.beginPath()
     const coordinates = renderOpt.coordinates
+    ctx.moveTo(coordinates[0][0], coordinates[0][1])
     for (let i = 0,ii = coordinates.length ; i < ii - 1 ; i++) {
-      ctx.moveTo(coordinates[i][0],coordinates[i][1])
-      ctx.lineTo(coordinates[i + 1][0],coordinates[i + 1][1])
+      ctx.lineTo(coordinates[i+1][0],coordinates[i+1][1])
     }
   
     if (renderOpt.hasDash) {

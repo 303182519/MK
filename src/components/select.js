@@ -22,8 +22,8 @@ let hasMutilSelectedSymbol = Symbol('hasmutilselected')
  * @example
  *
  *      // 实例化选择工具
- *      selectTool = new Datatang.Select({
- *       selectMode: Datatang.BrowserEvent.CLICK,
+ *      selectTool = new mk.Select({
+ *       selectMode: mk.BrowserEvent.CLICK,
  *       selectMultiMode: selectMultiMode
  *      });
  *
@@ -174,7 +174,7 @@ export default class Select extends Component {
     map.forEachFeatureAtPiexl(pixel, (features) => {
       if(features.length > 0){
         // 赋值并填充到selectFeatures中
-        this.selectFeatures = [features[0]]
+        this.selectFeatures = features
       }
     }, hitTolerance)
 
@@ -284,7 +284,7 @@ export default class Select extends Component {
    *
    * @type {Function}
    * @property map
-   * @param map {Object} Datatang.map
+   * @param map {Object} mk.map
    */
   get map (){ return this._map }
   set map (map) {
@@ -305,7 +305,7 @@ export default class Select extends Component {
    * 选择方式读写器
    *
    * @property selectMode
-   * @type {Object} Datatang.BrowserEvent.CLICK
+   * @type {Object} mk.BrowserEvent.CLICK
    * @return {*}
    */
   get selectMode () { return this._selectMode }

@@ -376,7 +376,7 @@ export default class Overlay extends BaseObject {
    * map读写器, 读取设置当前map
    *
    * @property map
-   * @type {Datatang.map}
+   * @type {mk.map}
    */
   get map () { return this._map }
   set map (value) {

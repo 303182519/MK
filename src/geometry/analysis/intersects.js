@@ -7,7 +7,8 @@ import {ExtentUtil} from '../support/extentutil'
 
 /**
  * 判断任意图形是否相交
- * @TODO 还需要解决带洞多边形带来的问题
+ * @TODO 算法返回的结果修改为：找到碰撞的图形或部分，而不是返回布尔值，
+ * 这样可以避免二次寻找
  *
  * @method intersects
  * @param geometry1
@@ -42,8 +43,17 @@ export default function intersects (geometry1, geometry2) {
     break
   case Geometry.POLYGON:
   case Geometry.EXTENT:
-    result = polygonIntersectsGeometry(geometry1, geometry2)
+    if (geometry2.geometryType === Geometry.MULTI_POLYGON) {
+      result = mutilPolygonIntersectsGeometry(geometry2, geometry1)
+    } else {
+      result = polygonIntersectsGeometry(geometry1, geometry2)
+    }
+    break
+  case Geometry.MULTI_POLYGON:
+    result = mutilPolygonIntersectsGeometry(geometry1, geometry2)
+    break
   }
+
   
   return result
 }
@@ -61,6 +71,7 @@ const pointIntersectsGeometry = function(point, geometry) {
   case Geometry.POINT:
   case Geometry.LINE:
   case Geometry.POLYGON:
+  case Geometry.MULTI_POLYGON:
   case Geometry.EXTENT:
     return geometry.containsXY(point.x, point.y)
   }
@@ -113,8 +124,23 @@ const polygonIntersectsGeometry = function (poly, geometry) {
   case Geometry.LINE:
     return lineIntersectsPolygon(geometry, poly)
   case Geometry.POLYGON:
+  case Geometry.MUTIL_POLYGON:
   case Geometry.EXTENT:
     return polygonIntersectsPolygon(poly, geometry)
+  }
+}
+
+const mutilPolygonIntersectsGeometry = function(mutilPoly, geometry) {
+  const geometryType = geometry.geometryType
+  switch (geometryType) {
+    case Geometry.POINT:
+      return mutilPoly.containsXY(geometry.x, geometry.y)
+    // case Geometry.LINE:
+      // return lineIntersectsPolygon(geometry, poly);
+    case Geometry.POLYGON:
+    case Geometry.MULTI_POLYGON:
+    case Geometry.EXTENT:
+      return mutilPolygonIntersectsPolygon(mutilPoly, geometry)
   }
 }
 
@@ -192,6 +218,30 @@ const polygonIntersectsPolygon = function (poly, polygon) {
   }
   
   return intersect
+}
+
+const mutilPolygonIntersectsPolygon = function(mutilPoly, polygon) {
+  const intersectsByLinearRingsFn = intersectsByLinearRings
+  let lineLinearRings = mutilPoly.getCoordinates()
+  let polygon2LinearRings = []
+
+  const polygonGeometryType = polygon.geometryType
+  if (polygonGeometryType == Geometry.EXTENT) {
+    polygon2LinearRings = [polygon.getCoordinates()]
+  } else if (polygonGeometryType == Geometry.POLYGON) {
+    polygon2LinearRings = [polygon.getCoordinates()[0]] // 取外环
+  } else if (polygonGeometryType == Geometry.MULTI_POLYGON) {
+    polygon2LinearRings = polygon.getCoordinates()
+  }
+
+  let result = lineLinearRings.find( ring => {
+    const oneRingIntersects = polygon2LinearRings.find( 
+      linarRing => intersectsByLinearRingsFn(ring[0], linarRing))
+
+    return oneRingIntersects !== undefined ? true : false
+  })
+
+  return result !== undefined ? true : false
 }
 
 const intersectsByLinearRings = function (LinearRing1, LinearRings2) {

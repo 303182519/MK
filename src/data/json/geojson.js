@@ -88,14 +88,17 @@ export default class GeoJSON {
     const featuresArr = []
     
     features.forEach( feature => {
+      const properties = Obj.mapToObject(feature._attributesMap)
+      Reflect.deleteProperty(properties, '_originStyle')
+      Reflect.deleteProperty(properties, 'Symbol(hasmutilselected)')
+
       featuresArr.push({
         type: 'Feature',
         geometry: {
           type: GeoJSON.getGeoJSONGeometryType(feature.geometry),
           coordinates: feature.geometry.getCoordinates()
         },
-        properties: Obj.mapToObject(feature._attributesMap),
-
+        properties,
         title: feature.displayText
       })
     })

@@ -35,7 +35,7 @@ import {functions} from '../utils/functions'
  * @example
  *
  *      // 实例化编辑工具
- *      var modifyTool = new Datatang.Modify({
+ *      var modifyTool = new mk.Modify({
  *        features: selectedFeaturs
  *      })
  */
@@ -299,16 +299,17 @@ export default class Modify extends Component {
     if (!(browserEvent instanceof BrowserEvent)) {
       return true
     }
-  
+
     browserEvent.coordinate = this.coordinateBeyond(browserEvent.coordinate)
     
     this.lastPointerEvent_ = browserEvent
   
-    let handled
+    let handled = false
     if ( browserEvent.type == BrowserEvent.MOUSE_MOVE &&
       !this.handlingDownUpSequence) {
       this._handlePointerMove(browserEvent)
     }
+
     if (this._vertexFeature && this._deleteCondition(browserEvent)) {
       if (browserEvent.type !== BrowserEvent.SINGLE_CLICK ||
         !this._ignoreNextSingleClick) {
@@ -324,7 +325,7 @@ export default class Modify extends Component {
   
     return super.handleMouseEvent(browserEvent) && !handled
   }
-  
+
   /**
    * Removes the vertex currently being pointed.
    *
@@ -388,9 +389,9 @@ export default class Modify extends Component {
     
     if (vertexFeature) {
       const insertVertices = [this._snapSegments]
-      if (insertVertices.length) {
-        this._willModifyFeatures(evt)
-      }
+      // if (insertVertices.length) {
+      //   this._willModifyFeatures(evt)
+      // }
   
       this._shouldAddToVertexs = true
       this._insertVertices = insertVertices
@@ -549,7 +550,7 @@ export default class Modify extends Component {
   _handleDragEvent (evt) {
     this._ignoreNextSingleClick = false
     const vertex = evt.coordinate
-  
+
     if (this._shouldAddToVertexs) {
       const vertexFeature = this._vertexFeature
       const vertex = vertexFeature.geometry.getCoordinates()
@@ -658,6 +659,9 @@ export default class Modify extends Component {
           ymax: this.map.view.dataExtent[3]
         }
       })
+
+      this.dispatchEvent(new ModifyEvent(
+        ModifyEvent.EventType.MODIFY_END, this._currentMovedGeometry.clone(), evt))
       
       this.changed()
       this._downPoint = vertex
@@ -748,7 +752,7 @@ export default class Modify extends Component {
     case Geometry.POINT:
       coordinates = geometry.getCoordinates()
       coordinates = vertex
-      break
+      break 
     case Geometry.EXTENT:
       coordinates = geometry.getCoordinates()
       break
@@ -1013,7 +1017,7 @@ export default class Modify extends Component {
    *
    * @type {Function}
    * @property map
-   * @param map {Object} Datatang.map
+   * @param map {Object} mk.map
    */
   get map () {return this._map}
   set map (map) {

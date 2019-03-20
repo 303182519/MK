@@ -1,9 +1,9 @@
 window.onload = function () {
   var extent = [0, 0, 1024, 768];
   
-  var map = new Datatang.Map({
+  var map = new mk.Map({
     layers: [
-      new Datatang.SingleImageLayer({
+      new mk.SingleImageLayer({
         url: 'source/Tulips.jpg',
         imageExtent: extent,
         projection: {
@@ -12,11 +12,11 @@ window.onload = function () {
       })
     ],
     target: 'map',
-    view: new Datatang.View({
+    view: new mk.View({
       projection: {
         extent: extent
       },
-      center: Datatang.ExtentUtil.getCenter(extent),
+      center: mk.ExtentUtil.getCenter(extent),
       zoom: 1,
       maxZoom: 8
     })

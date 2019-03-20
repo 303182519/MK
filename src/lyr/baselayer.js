@@ -39,7 +39,7 @@ export default class BaseLayer extends BaseObject {
    *
    * @type {Function}
    * @property map
-   * @param mapValue {Object} Datatang.map
+   * @param mapValue {Object} mk.map
    */
   get map () { return this._map }
   set map (value) {

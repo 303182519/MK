@@ -10,7 +10,7 @@ window.onload = function () {
     images[i] = img
   }
   
-  var imageLayer = new Datatang.SingleImageLayer({
+  var imageLayer = new mk.SingleImageLayer({
     url: 'source/weather/weather-0.jpg',
     imageExtent: extent,
     projection: {
@@ -18,16 +18,16 @@ window.onload = function () {
     }
   })
   
-  var map = new Datatang.Map({
+  var map = new mk.Map({
     layers: [
       imageLayer
     ],
     target: 'map',
-    view: new Datatang.View({
+    view: new mk.View({
       projection: {
         extent: extent
       },
-      center: Datatang.ExtentUtil.getCenter(extent),
+      center: mk.ExtentUtil.getCenter(extent),
       zoom: 2,
       maxZoom: 8
     })

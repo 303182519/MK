@@ -108,7 +108,7 @@ export default class MutilPolygon extends Geometry {
    * 获得一个多边形对象
    * @method getPolygon
    * @param index 多边形的下标
-   * @returns {Datatang.Polygon} 返回一个新的多边形对象
+   * @returns {mk.Polygon} 返回一个新的多边形对象
    */
   getPolygon (index) {
     if (index < 0 && this._polygons.length < index ) {
@@ -129,6 +129,17 @@ export default class MutilPolygon extends Geometry {
     
     const polygon = new Polygon(outRing)
     return polygon
+  }
+
+  getFormShowPosition(offsetX = 0, offsetY = 0) {
+    const polygon = this.getPolygon(0)
+    const coordinates = polygon.getCoordinates()[0]
+    if (coordinates.length === 0) {
+      return
+    }
+
+    const lastPoint = coordinates[coordinates.length - 2]
+    return [lastPoint[0] - offsetX, lastPoint[1] - offsetY]
   }
   
   /**
@@ -278,5 +289,16 @@ export default class MutilPolygon extends Geometry {
     const newMutilPolygon = new MutilPolygon(allCoords)
     return newMutilPolygon
   }
-  
+
+  /**
+   * 将一个复合多边形，转换成多边形集合
+   */
+  convertToPolygons() {
+    const polygons = []
+    this._polygons.forEach((p, index) => {
+      polygons.push(this.getPolygon(index))
+    })
+
+    return polygons
+  }
 }

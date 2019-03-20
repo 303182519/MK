@@ -14,9 +14,9 @@ import TextStyle from './textstyle'
  * @constructor
  * @example
  *
- *     var lineStye = new Datatang.LineStyle([0, 0, 255],1,3,
- *        Datatang.LineStyle.LineCap.ROUND,
- *        Datatang.LineStyle.LineJion.ROUND)
+ *     var lineStye = new mk.LineStyle([0, 0, 255],1,3,
+ *        mk.LineStyle.LineCap.ROUND,
+ *        mk.LineStyle.LineJion.ROUND)
  */
 export default class LineStyle extends BaseStyle {
   

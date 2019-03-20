@@ -76,7 +76,7 @@ export default class DragPan extends Component {
      * @type {boolean}
      */
     this._noKinetic = false
-    
+
   }
   
   /**

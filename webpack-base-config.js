@@ -9,11 +9,11 @@ module.exports = {
     })
   ],
   module: {
-    preLoaders: [{
-      test: /\.js$/,
-      loader: 'eslint',
-      include: path.resolve(__dirname, 'src')
-    }],
+    // preLoaders: [{
+    //   test: /\.js$/,
+    //   loader: 'eslint',
+    //   include: path.resolve(__dirname, 'src')
+    // }],
     loaders: [
       {
         test: /\.js$/,

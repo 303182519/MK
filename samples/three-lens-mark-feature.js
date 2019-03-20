@@ -9,22 +9,22 @@ var drawTool,
   modifyTool2;
 
 window.onload = function (){
-  var Fortesting = new Datatang.FeatureLayer()
-  var Fortesting1 = new Datatang.FeatureLayer()
-  var Fortesting2 = new Datatang.FeatureLayer()
+  var Fortesting = new mk.FeatureLayer()
+  var Fortesting1 = new mk.FeatureLayer()
+  var Fortesting2 = new mk.FeatureLayer()
   var extent = [0,0,1280,800]
 
   //随机添加i个点
   for(i = 0; i<=10; i++){
     var x = parseInt(Math.random()*1280)
     var y = parseInt(Math.random()*800)
-    var point = new Datatang.Point(x,y)
-    var features = [new Datatang.Feature(point)]
+    var point = new mk.Point(x,y)
+    var features = [new mk.Feature(point)]
     Fortesting.addFeatures(features)
   }
 
-  var map = new Datatang.Map({
-    layers:[new Datatang.SingleImageLayer({
+  var map = new mk.Map({
+    layers:[new mk.SingleImageLayer({
       url : "source/image01450.jpg",
       imageExtent :extent,
       projection:{
@@ -34,18 +34,18 @@ window.onload = function (){
       Fortesting
     ],
     target:'map',
-    view : new Datatang.View({
+    view : new mk.View({
       projection:{
         extent:extent
       },
-      center: Datatang.ExtentUtil.getCenter(extent),
+      center: mk.ExtentUtil.getCenter(extent),
       zoom: 2,
       maxZoom: 8
     })
   })
 
-  var map1 = new Datatang.Map({
-    layers:[new Datatang.SingleImageLayer({
+  var map1 = new mk.Map({
+    layers:[new mk.SingleImageLayer({
       url : "source/IMG_6776.JPG",
       imageExtent :extent,
       projection:{
@@ -55,18 +55,18 @@ window.onload = function (){
       Fortesting1
     ],
     target:'map1',
-    view : new Datatang.View({
+    view : new mk.View({
       projection:{
         extent:extent
       },
-      center: Datatang.ExtentUtil.getCenter(extent),
+      center: mk.ExtentUtil.getCenter(extent),
       zoom: 2,
       maxZoom: 8
     })
   })
 
-  var map2 = new Datatang.Map({
-    layers:[new Datatang.SingleImageLayer({
+  var map2 = new mk.Map({
+    layers:[new mk.SingleImageLayer({
       url : "source/China_map.jpg",
       imageExtent :extent,
       projection:{
@@ -76,54 +76,54 @@ window.onload = function (){
       Fortesting2
     ],
     target:'map2',
-    view : new Datatang.View({
+    view : new mk.View({
       projection:{
         extent:extent
       },
-      center: Datatang.ExtentUtil.getCenter(extent),
+      center: mk.ExtentUtil.getCenter(extent),
       zoom: 2,
       maxZoom: 8
     })
   })
   // First Components
-  drawTool = new Datatang.Draw({
+  drawTool = new mk.Draw({
     type: 'point',
     drawLayer: Fortesting
   });
 
-  modifyTool = new Datatang.Modify({
+  modifyTool = new mk.Modify({
     features: Fortesting.features
   });
 
-  selectTool = new Datatang.Select({
-    selectMode: Datatang.BrowserEvent.CLICK
+  selectTool = new mk.Select({
+    selectMode: mk.BrowserEvent.CLICK
   });
   // Second Components
-  drawTool1 = new Datatang.Draw({
+  drawTool1 = new mk.Draw({
     type: 'point',
     drawLayer: Fortesting1
   });
 
-  modifyTool1 = new Datatang.Modify({
+  modifyTool1 = new mk.Modify({
     features: Fortesting1.features
   });
 
-  selectTool1 = new Datatang.Select({
-    selectMode: Datatang.BrowserEvent.CLICK
+  selectTool1 = new mk.Select({
+    selectMode: mk.BrowserEvent.CLICK
   });
 
   // Third Components
-  drawTool2 = new Datatang.Draw({
+  drawTool2 = new mk.Draw({
     type: 'point',
     drawLayer: Fortesting2
   });
 
-  modifyTool2 = new Datatang.Modify({
+  modifyTool2 = new mk.Modify({
     features: Fortesting2.features
   });
 
-  selectTool2 = new Datatang.Select({
-    selectMode: Datatang.BrowserEvent.CLICK
+  selectTool2 = new mk.Select({
+    selectMode: mk.BrowserEvent.CLICK
   });
 
   map.addComponents(drawTool)

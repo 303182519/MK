@@ -21,7 +21,7 @@ export default class Renderer extends BaseObject {
   
   /**
    * @property map
-   * @type {Datatang.Map}
+   * @type {mk.Map}
    */
   get map () { return this._map }
   

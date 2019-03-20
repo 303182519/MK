@@ -29,7 +29,9 @@ export default function contains (polygon, geometry) {
       return polyContainsLine(polygon, geometry)
     } else if (targetGeometryType === Geometry.POLYGON ) {
       return polyContainsPoly(polygon, geometry)
-    } else if (targetGeometryType === Geometry.PARALLELOGRAM) {
+    } else if (targetGeometryType === Geometry.MULTI_POLYGON) {
+      return polyContainsMultiPoly(polygon, geometry)
+    }else if (targetGeometryType === Geometry.PARALLELOGRAM) {
       return polyContainsPoly(polygon, new Polygon(geometry.getCoordinates()))
     }
   }
@@ -49,11 +51,16 @@ const polyContainsPoly = function (poly, poly2) {
   if (poly2Type === Geometry.POLYGON ) {
     const outRing = poly2.getCoordinates()[0]
     return polygonContainsLinestring(poly, outRing)
-  } else if (poly2Type === Geometry.MULTI_POLYGON ) {
-    return true
   }
-  
+
   return false
+}
+
+const polyContainsMultiPoly = function (polygon, mutilpolygon) {
+  const polys = mutilpolygon.convertToPolygons()
+  const contained = polys.find( p => !polyContainsPoly(polygon, p))
+
+  return contained == undefined ? true: false
 }
 
 

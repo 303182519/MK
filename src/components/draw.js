@@ -30,9 +30,9 @@ import {functions} from '../utils/functions'
  * @example
  *
  *      // 实例化绘图工具
- *      var drawTool = new Datatang.Draw({
+ *      var drawTool = new mk.Draw({
  *        type: 'point',
- *        drawLayer: new Datatang.FeatureLayer()
+ *        drawLayer: new mk.FeatureLayer()
  *      })
  *
  */
@@ -124,6 +124,12 @@ export default class Draw extends Component {
      */
     this._finishCondition = options.finishCondition ?
         options.finishCondition : functions.TURE
+
+    /**
+     * 是否有绘制完毕的执行条件配置，用于控制绘制完毕的键盘事件
+     */
+    this._hasFinishConditionOptions = options.finishCondition ? 
+        true : false
         
     /**
      * 撤销条件
@@ -134,6 +140,12 @@ export default class Draw extends Component {
      */
     this._undoCondition = options.undoCondition !== undefined ?
         options.undoCondition : functions.TURE
+
+    /**
+     * 是否有绘制完毕的执行条件配置，用于控制绘制完毕的键盘事件
+     */
+    this._hasUndoConditionOptions = options.undoCondition ?
+      true : false
   
     /**
      * 设置默认回退的顶点数，默认1
@@ -288,6 +300,34 @@ export default class Draw extends Component {
         
       
   }
+
+  _finishCheck() {
+    // 判断多边形的顶点是否小于4个（正常多边形3个顶点，首尾相接多一个顶点），小于4个不是多边形，return
+    if (this.drawMode === Draw.DrawMode.POLYGON) {
+      if (this._sketchFeature === null) {
+        return false
+      }
+
+      let pcoordinates = this._sketchFeature.geometry.getCoordinates()
+      if (pcoordinates[0].length < 4) {
+        return false
+      }
+    }
+
+    // 判断线的顶点是否小于2个，小于2个不是线段，return
+    if (this.drawMode === Draw.DrawMode.LINE) {
+      if (this._sketchFeature === null) {
+        return false
+      }
+
+      let pcoordinates = this._sketchFeature.geometry.getCoordinates()
+      if (pcoordinates.length <= 2) {
+        return false
+      }
+    }
+
+    return true
+  }
   
   /**
    * 处理绘制结束事件
@@ -299,38 +339,16 @@ export default class Draw extends Component {
    */
   _handleKeyboardEvent (event) {
     // If finish drawing
-    if (this._finishCondition(event)) {
-      // 判断多边形的顶点是否小于4个（正常多边形3个顶点，首尾相接多一个顶点），小于4个不是多边形，return
-      if (this.drawMode === Draw.DrawMode.POLYGON) {
-        if( this._sketchFeature === null) {
-          return
-        }
-        
-        let pcoordinates = this._sketchFeature.geometry.getCoordinates()
-        if (pcoordinates[0].length < 4) {
-          return
-        }
+    if (this._hasFinishConditionOptions && this._finishCondition(event)) {
+      if (this._finishCheck()) {
+        this._finishDrawing()
       }
-
-      // 判断线的顶点是否小于2个，小于2个不是线段，return
-      if (this.drawMode === Draw.DrawMode.LINE) {
-        if( this._sketchFeature === null) {
-          return
-        }
-        
-        let pcoordinates = this._sketchFeature.geometry.getCoordinates()
-        if (pcoordinates.length <= 2) {
-          return
-        }
-      }
-      
-      this._finishDrawing()
     }
     
     // If undo drawing
-    if (this._undoCondition) {
+    if (this._hasUndoConditionOptions) {
       if (this._undoCondition(event)) {
-        this._undoDrawing()
+        this.undoDrawing()
       }
     }
   }
@@ -356,7 +374,7 @@ export default class Draw extends Component {
    *
    * @type {Function}
    * @property drawMode
-   * @type {Datatang.Draw.DrawMode}
+   * @type {mk.Draw.DrawMode}
    */
   get drawMode () { return this._drawMode }
   set drawMode (value){
@@ -851,6 +869,12 @@ export default class Draw extends Component {
     
     return sketchFeature
   }
+
+  finishDrawing () {
+    if (this._finishCheck()) {
+      this._finishDrawing()
+    }
+  }
   
   /**
    * 绘制完成，形成正式feature
@@ -936,7 +960,7 @@ export default class Draw extends Component {
       }
       
       if (potentiallyDone) {
-        const map = event.map
+        const map = this.map
         for (let  i = 0, ii = potentiallyFinishCoordinates.length; i < ii; i++) {
           const finishCoordinate = potentiallyFinishCoordinates[i]
           const finishPixel = map.getPixelFromCoordinate(finishCoordinate)
@@ -1030,7 +1054,7 @@ export default class Draw extends Component {
    * @method undoDrawing
    * @private
    */
-  _undoDrawing () {
+  undoDrawing () {
     const drawMode = this.drawMode
     let undoStep = 1
     let polygonDeleteStep = 2
@@ -1044,7 +1068,15 @@ export default class Draw extends Component {
         const coordinates = this._sketchFeature.geometry.getCoordinates()
         if (coordinates.length + undoStep > 2) {
           coordinates.splice(coordinates.length - 2, undoStep)
-          this._sketchFeature.changed()
+          if (coordinates.length === 1) {
+            this._abortDrawing()
+            this._finishDrawing()
+          } else {
+            this._sketchFeature.changed()
+          }
+        } else {
+          this._abortDrawing()
+          this._finishDrawing()
         }
       }
     } else if (drawMode === Draw.DrawMode.POLYGON) {
@@ -1053,8 +1085,13 @@ export default class Draw extends Component {
         
         if (pcoordinates.length + undoStep > polygonDeleteStep ) {
           pcoordinates.splice(pcoordinates.length - polygonDeleteStep, undoStep)
-          this._sketchFeature.changed()
-        }else {
+          if (pcoordinates.length === 1) {
+            this._abortDrawing()
+            this._finishDrawing()
+          } else {
+            this._sketchFeature.changed()
+          }
+        } else {
           this._abortDrawing()
           this._finishDrawing()
         }
@@ -1068,7 +1105,7 @@ export default class Draw extends Component {
    *
    * @type {Function}
    * @property map
-   * @param mapValue {Object} Datatang.map
+   * @param mapValue {Object} mk.map
    */
   get map (){ return this._map }
   set map (mapValue) {

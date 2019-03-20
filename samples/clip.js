@@ -3,13 +3,13 @@
  */
 
 
-var featureLayer = new Datatang.FeatureLayer()
+var featureLayer = new mk.FeatureLayer()
 
 // 初始化map、view和layer
 var mapextent = [0, 0, 1024, 968];
-var map = new Datatang.Map({
+var map = new mk.Map({
   layers: [
-    new Datatang.SingleImageLayer({
+    new mk.SingleImageLayer({
       url: 'source/online_communities.png',
       imageExtent: mapextent,
       projection: {
@@ -19,18 +19,18 @@ var map = new Datatang.Map({
     featureLayer
   ],
   target: 'map',
-  view: new Datatang.View({
+  view: new mk.View({
     projection: {
       extent: mapextent
     },
-    center: Datatang.ExtentUtil.getCenter(mapextent),
+    center: mk.ExtentUtil.getCenter(mapextent),
     zoom: 2,
     maxZoom: 8
   })
 });
 
 // 绘图工具
-var drawTool = new Datatang.Draw({
+var drawTool = new mk.Draw({
   type: 'polygon',
   drawLayer: featureLayer
 })
@@ -38,16 +38,16 @@ var drawTool = new Datatang.Draw({
 map.addComponents(drawTool)
 drawTool.active = false
 
-var select = new Datatang.Select({
-  selectMode: Datatang.BrowserEvent.MOUSE_MOVE
+var select = new mk.Select({
+  selectMode: mk.BrowserEvent.MOUSE_MOVE
 })
 
 map.addComponents(select)
 
 // 多边形
 var rings = [[800,580],[490,600],[255, 820], [1000,1000],[800,580]]
-var polygon = new Datatang.Polygon(rings)
-var feature = new Datatang.Feature(polygon)
+var polygon = new mk.Polygon(rings)
+var feature = new mk.Feature(polygon)
 
 featureLayer.addFeature(feature)
 
@@ -57,15 +57,15 @@ function getIntersectFeatures (feature, targetLayer) {
   
   var results = allFeatures.filter(function(f){
     return f.id !== feature.id &&
-      f.geometryType !== Datatang.Geometry.POINT &&
-      Datatang.intersects(f.geometry, feature.geometry)
+      f.geometryType !== mk.Geometry.POINT &&
+      mk.intersects(f.geometry, feature.geometry)
   })
   
   return results
 }
 
 
-drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEvent){
+drawTool.addEventListener(mk.DrawEvent.EventType.DRAW_END, function(drawEvent){
   var drawFeature = drawEvent.feature
   var intersectedFeatures = getIntersectFeatures(drawFeature, featureLayer)
   if (intersectedFeatures.length === 0) {
@@ -115,10 +115,10 @@ drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEv
         newCoords.push([g.x, g.y])
       })
       
-      var clipedPolygon = new Datatang.Polygon()
+      var clipedPolygon = new mk.Polygon()
       clipedPolygon.setCoordinates(newCoords)
       
-      var clipedFeature = new Datatang.Feature(clipedPolygon)
+      var clipedFeature = new mk.Feature(clipedPolygon)
       
       featureLayer.addFeature(clipedFeature)
       featureLayer.removeFeature(drawFeature)
@@ -136,9 +136,9 @@ function convertToJstsGeometry(geometry) {
     geometryFactory = new jsts.geom.GeometryFactory();
   }
   
-  if (geometry.geometryType === Datatang.Geometry.POLYGON) {
+  if (geometry.geometryType === mk.Geometry.POLYGON) {
     return convertToPolygon(geometry)
-  } else if (geometry.geometryType === Datatang.Geometry.LINE ) {
+  } else if (geometry.geometryType === mk.Geometry.LINE ) {
     return convertToLine(geometry)
   }
 }
@@ -169,7 +169,7 @@ function convertToPolygon (polygon) {
 function onDrawClick () {
   drawTool.active = true
   select.active = false
-  drawTool.drawMode = Datatang.Draw.DrawMode.POLYGON
+  drawTool.drawMode = mk.Draw.DrawMode.POLYGON
 }
 
 

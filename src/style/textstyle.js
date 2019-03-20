@@ -14,15 +14,15 @@ import BaseObject from '../core/baseobject'
  * @constructor
  * @example
  *
- *     new Datatang.TextStyle({
+ *     new mk.TextStyle({
  *       textAlign: 'center',
  *       textBaseline: 'middle',
  *       font: 'Arial',
  *       text: '标注示例',
  *       fill: [255, 0, 0],
- *       stroke: new Datatang.LineStyle([255, 255, 255],1,3,
- *          Datatang.LineStyle.LineCap.ROUND,
- *          Datatang.LineStyle.LineJion.ROUND),
+ *       stroke: new mk.LineStyle([255, 255, 255],1,3,
+ *          mk.LineStyle.LineCap.ROUND,
+ *          mk.LineStyle.LineJion.ROUND),
  *       offsetX: 0,
  *       offsetY: 0,
  *       rotation: 0
@@ -74,7 +74,7 @@ export default class TextStyle extends BaseObject {
      * @private
      * @type {string|undefined}
      */
-    this.textAlign = options.textAlign || TextStyle.DEFAULT_TEXT_ALIGN
+    this.textAlign = options.textAlign || TextStyle.DEFAULT_TEXT_START
   
     /**
      * @private
@@ -274,6 +274,11 @@ TextStyle.DEFAULT_FONT = 'normal 12px Arial'
  */
 TextStyle.DEFAULT_TEXT_ALIGN = 'center'
 
+/**
+ * 字体显示从左边开始计算
+ */
+TextStyle.DEFAULT_TEXT_START = 'start'
+
 
 /**
  * 默认字体显示位置
@@ -282,7 +287,7 @@ TextStyle.DEFAULT_TEXT_ALIGN = 'center'
  * @final
  *
  */
-TextStyle.DEFAULT_BASE_LINE = 'middle'
+TextStyle.DEFAULT_BASE_LINE = 'bottom'
 
 /**
  * 默认字体缩放初始值

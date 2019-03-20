@@ -16,7 +16,7 @@ import TextStyle from './textstyle'
  *
  *  // 定义一个点，包括外边框的样式
  *
- *  var pointStyle = new Datatang.PointStyle(10,[255, 255, 255],1,new Datatang.LineStyle([0, 0, 255],1,1))
+ *  var pointStyle = new mk.PointStyle(10,[255, 255, 255],1,new mk.LineStyle([0, 0, 255],1,1))
  *
  */
 export default class PointStyle extends BaseStyle {

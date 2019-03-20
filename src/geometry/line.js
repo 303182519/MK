@@ -17,7 +17,7 @@ import {lineString} from './support/interpolate'
  * @constructor
  * @example
  *
- *  var line = new Datatang.Line()
+ *  var line = new mk.Line()
  *
  *  line.setCoordinates([100, 100], [200, 200], [400, 500])
  */
@@ -243,7 +243,7 @@ export default class Line extends Geometry {
    * @returns {Line} new line
    */
   clone () {
-    const newCoordinates = this.getCoordinates()
+    const newCoordinates = []
     this.getCoordinates().forEach( coords => {
       newCoordinates.push([coords[0], coords[1]])
     })

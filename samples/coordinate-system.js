@@ -1,21 +1,21 @@
 window.onload = function () {
 
-  var point = new Datatang.Point(100, 100)
+  var point = new mk.Point(100, 100)
   
   var features = [
-    new Datatang.Feature(point)
+    new mk.Feature(point)
   ]
   
   // 将会获取缺省样式
-  var featureLayer = new Datatang.FeatureLayer({
+  var featureLayer = new mk.FeatureLayer({
     features: features
   })
 
   var mapextent = [0, 0, 2783, 2125];
-  var map = new Datatang.Map({
+  var map = new mk.Map({
     layers: [
       featureLayer,
-      new Datatang.SingleImageLayer({
+      new mk.SingleImageLayer({
         url: 'source/China_map.jpg',
         imageExtent: mapextent,
         projection: {
@@ -25,11 +25,11 @@ window.onload = function () {
       
     ],
     target: 'map',
-    view: new Datatang.View({
+    view: new mk.View({
       projection: {
         extent: mapextent
       },
-      center: Datatang.ExtentUtil.getCenter(mapextent),
+      center: mk.ExtentUtil.getCenter(mapextent),
       zoom: 2,
       maxZoom: 8
     })

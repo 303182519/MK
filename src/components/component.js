@@ -343,7 +343,7 @@ export default class Component extends BaseObject {
    *
    * @type {Function}
    * @property map
-   * @type {Datatang.map}
+   * @type {mk.map}
    */
   get map () { return this._map }
   set map (value) { this._map = value }

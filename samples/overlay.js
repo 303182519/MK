@@ -1,7 +1,7 @@
 var container = document.getElementById('popup')
 var content = document.getElementById('popup-content')
 var closer = document.getElementById('popup-closer')
-var overlay = new Datatang.Overlay(({
+var overlay = new mk.Overlay(({
   element: container,
   autoPan: true
 }))
@@ -19,9 +19,9 @@ closer.onclick = function() {
  * Create the map.
  */
 var mapextent = [0, 0, 2783, 2125];
-var map = new Datatang.Map({
+var map = new mk.Map({
   layers: [
-    new Datatang.SingleImageLayer({
+    new mk.SingleImageLayer({
       url: 'source/China_map.jpg',
       imageExtent: mapextent,
       projection: {
@@ -31,11 +31,11 @@ var map = new Datatang.Map({
   ],
   overlays: [overlay],
   target: 'map',
-  view: new Datatang.View({
+  view: new mk.View({
     projection: {
       extent: mapextent
     },
-    center: Datatang.ExtentUtil.getCenter(mapextent),
+    center: mk.ExtentUtil.getCenter(mapextent),
     zoom: 2,
     maxZoom: 8
   })

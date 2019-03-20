@@ -1,0 +1,7 @@
+.DS_Store
+.vscode
+build/*.js
+api/
+dist/*.js
+samples/*.js
+node_modules

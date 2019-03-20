@@ -256,6 +256,7 @@ export default class Map extends BaseObject {
         }
 
         let cont = cpt.handleMouseEvent(browserEvent)
+
         if (!cont) {
           break
         }

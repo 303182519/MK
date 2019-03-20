@@ -22,7 +22,7 @@ import {linearRingsAreOriented,orientLinearRings} from './support/orient'
  * @constructor
  * @example
  *
- *  var polygon = new Datatang.Polygon([[100, 100], [120, 130],[50, 50],[100, 100]])
+ *  var polygon = new mk.Polygon([[100, 100], [120, 130],[50, 50],[100, 100]])
  *
  */
 export default class Polygon extends Geometry {

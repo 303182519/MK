@@ -48,8 +48,12 @@ export default class TextRender extends GeometryRender {
       // set the context text style
       this._setTextStyle(ctx, textStyle)
   
-      const offsetX = textStyle.offsetX - 10
-      const offsetY = textStyle.offsetY - 10
+      // const offsetX = textStyle.offsetX + 10
+      const offsetX = textStyle.offsetX
+      // const offsetY = textStyle.offsetY + 10
+      const offsetY = textStyle.offsetY - 3
+
+
       const stroke = textStyle.stroke ? true : false
       const fill = textStyle.fill ? true : false
       const text = textStyle.text
@@ -73,6 +77,7 @@ export default class TextRender extends GeometryRender {
         if (stroke) {
           ctx.strokeText(lineText, x, lineY)
         }
+
         if (fill) {
           ctx.fillText(lineText, x, lineY)
         }

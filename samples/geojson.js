@@ -1,11 +1,11 @@
 //初始化图层对象以及style回调函数
-var featureLayer = new Datatang.FeatureLayer()
+var featureLayer = new mk.FeatureLayer()
 
 // 初始化map、view和layer
 var extent = [0, 0, 2783, 2125];
-var map = new Datatang.Map({
+var map = new mk.Map({
   layers: [
-    new Datatang.SingleImageLayer({
+    new mk.SingleImageLayer({
       url: 'source/China_map.jpg',
       imageExtent: extent,
       projection: {
@@ -15,18 +15,18 @@ var map = new Datatang.Map({
     featureLayer
   ],
   target: 'map',
-  view: new Datatang.View({
+  view: new mk.View({
     projection: {
       extent: extent
     },
-    center: Datatang.ExtentUtil.getCenter(extent),
+    center: mk.ExtentUtil.getCenter(extent),
     resolution: 2,
     resolutions: [4,2,1,0.5,0.25,0.125, 0.0625, 0.03125]
   })
 });
 
 // 绘图工具
-var drawTool = new Datatang.Draw({
+var drawTool = new mk.Draw({
   type: 'point',
   drawLayer: featureLayer
 })
@@ -41,12 +41,12 @@ typeSelect.onchange = function() {
 
 var a = getJSON()
 
-var features = Datatang.GeoJSON.read(a)
+var features = mk.GeoJSON.read(a)
 featureLayer.addFeatures(features)
 
 function onClick(e) {
   var features = featureLayer.features
-  var result = Datatang.GeoJSON.write(features)
+  var result = mk.GeoJSON.write(features)
   console.log(JSON.stringify(result))
 }
 

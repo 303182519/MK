@@ -59,7 +59,7 @@ export default class BaseStyle extends BaseObject {
    * 样式对象
    *
    * @property style
-   * @type {Datatang.Style}
+   * @type {mk.Style}
    */
   get style () { return this._style }
   set style (value) { this._style = value }

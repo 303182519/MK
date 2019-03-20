@@ -41,7 +41,7 @@ export default class Geometry extends BaseObject {
    * 除去点意外，任何图形都有最小外接矩形
    *
    * @property extent
-   * @type {Datatang.Extent}
+   * @type {mk.Extent}
    */
   get extent () { return this._extent }
   
@@ -122,7 +122,7 @@ export default class Geometry extends BaseObject {
    * 计算线的平面内点
    *
    * @method getFlatInteriorPoint
-   * @returns {Array}
+   * @returns { Array }
    */
   getFlatInteriorPoint () { return [] }
   

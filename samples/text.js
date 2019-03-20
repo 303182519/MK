@@ -6,26 +6,26 @@ var dom;
 window.onload = function () {
   
   // 点
-  var point = new Datatang.Point(1960,1210)
+  var point = new mk.Point(1960,1210)
     
   // 多段线
   var path = [[1960,1210],[2000,1000],[1980,800],[1900,600],[1850,500],[1828, 310]]
-  var line = new Datatang.Line()
+  var line = new mk.Line()
   line.path = path
   
   // 多边形
   var rings = [[[800,580],[490,600],[400,660],[300, 700],[270, 780],[255, 820],[230, 860],[280,1050],
     [1000,1000],[1000,800],[800,580]]]
-  var polygon = new Datatang.Polygon(rings)
+  var polygon = new mk.Polygon(rings)
   
   // 矩形
-  var extent = new Datatang.Extent(1500, 1500, 2000, 2000)
+  var extent = new mk.Extent(1500, 1500, 2000, 2000)
   
   var features = [
-    new Datatang.Feature(point, null, '北京站')
-    ,new Datatang.Feature(line, null, '京广高铁')
-    ,new Datatang.Feature(polygon, null, '此处是中国西部地区面积很大的三江源湿地')
-    ,new Datatang.Feature(extent, null, '第51区域')
+    new mk.Feature(point, null, '北京站')
+    ,new mk.Feature(line, null, '京广高铁')
+    ,new mk.Feature(polygon, null, '此处是中国西部地区面积很大的三江源湿地')
+    ,new mk.Feature(extent, null, '第51区域')
   ]
   
   dom = {
@@ -66,23 +66,23 @@ window.onload = function () {
     // -----------------------
     
     // 面样式 polygon style
-    style[Datatang.Geometry.POLYGON] = [
-      new Datatang.FillStyle(white,new Datatang.LineStyle(blue,1,1.25),0.5)
+    style[mk.Geometry.POLYGON] = [
+      new mk.FillStyle(white,new mk.LineStyle(blue,1,1.25),0.5)
     ]
-    style[Datatang.Geometry.MULTI_POLYGON] = style[Datatang.Geometry.POLYGON]
+    style[mk.Geometry.MULTI_POLYGON] = style[mk.Geometry.POLYGON]
     
     // same as polygon style
-    style[Datatang.Geometry.EXTENT] = style[Datatang.Geometry.POLYGON]
+    style[mk.Geometry.EXTENT] = style[mk.Geometry.POLYGON]
   
     // 线样式 line style
-    style[Datatang.Geometry.LINE] =
-      [new Datatang.LineStyle(blue,1,width,Datatang.LineStyle.LineCap.ROUND,
-        Datatang.LineStyle.LineJion.ROUND)// 内框
+    style[mk.Geometry.LINE] =
+      [new mk.LineStyle(blue,1,width,mk.LineStyle.LineCap.ROUND,
+        mk.LineStyle.LineJion.ROUND)// 内框
     ]
   
     // 点样式 point style
-    style[Datatang.Geometry.POINT] =
-      [new Datatang.PointStyle(10,white,1,new Datatang.LineStyle(blue,1,width))]
+    style[mk.Geometry.POINT] =
+      [new mk.PointStyle(10,white,1,new mk.LineStyle(blue,1,width))]
 
     // -----------------------
     // 文本样式
@@ -95,20 +95,20 @@ window.onload = function () {
   }
   
   //初始化图层对象以及style回调函数
-  var featureLayer = new Datatang.FeatureLayer({
+  var featureLayer = new mk.FeatureLayer({
     // features: features,
     style: styleFunction
   })
   
   var a = getJSON()
-  var features = Datatang.GeoJSON.read(a)
+  var features = mk.GeoJSON.read(a)
   featureLayer.addFeatures(features)
   
   // 初始化map、view和layer
   var mapextent = [0, 0, 2783, 2125];
-  var map = new Datatang.Map({
+  var map = new mk.Map({
     layers: [
-      new Datatang.SingleImageLayer({
+      new mk.SingleImageLayer({
         url: 'source/China_map.jpg',
         imageExtent: mapextent,
         projection: {
@@ -118,11 +118,11 @@ window.onload = function () {
       featureLayer
     ],
     target: 'map',
-    view: new Datatang.View({
+    view: new mk.View({
       projection: {
         extent: mapextent
       },
-      center: Datatang.ExtentUtil.getCenter(mapextent),
+      center: mk.ExtentUtil.getCenter(mapextent),
       resolution: 2,
       resolutions: [8,4,2,1,0.5,0.25,0.125]
     })
@@ -172,15 +172,15 @@ function getTextStyle(feature, resolution) {
   var outlineColor = [255, 255, 255] || dom.outline.value;
   var outlineWidth = parseInt(dom.outlineWidth.value, 10);
   
-  return new Datatang.TextStyle({
+  return new mk.TextStyle({
     textAlign: align,
     textBaseline: baseline,
     font: font,
     text: getText(feature, resolution, dom),
     fill: fillColor,
-    stroke: new Datatang.LineStyle(outlineColor,1,outlineWidth,
-      Datatang.LineStyle.LineCap.ROUND,
-      Datatang.LineStyle.LineJion.ROUND),
+    stroke: new mk.LineStyle(outlineColor,1,outlineWidth,
+      mk.LineStyle.LineCap.ROUND,
+      mk.LineStyle.LineJion.ROUND),
     offsetX: offsetX,
     offsetY: offsetY,
     rotation: rotation

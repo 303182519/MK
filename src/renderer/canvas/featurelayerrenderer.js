@@ -14,8 +14,10 @@ import {ExtentUtil} from '../../geometry/support/extentutil'
 export default class FeatureLayerRenderer extends LayerRenderer {
   
   
-  constructor (layer,context) {
+  constructor (layer, context, map) {
     super(layer, context)
+
+    this._map = map
   
     /**
      *
@@ -102,6 +104,42 @@ export default class FeatureLayerRenderer extends LayerRenderer {
     }
     
   }
+
+  _calculaterFeaturesFontSize(features) {
+    const view = this._map.view
+    const originResolution = view._originalResolution
+    const resolutions = view._resolutions
+    const resolution = view._resolution
+
+    if (!resolutions) {
+      return
+    }
+
+    const oriIndex = resolutions.findIndex(r => r == originResolution)
+    const curIndex = resolutions.findIndex(r => r == resolution)
+
+    let deep = curIndex-oriIndex
+    if (deep <= 0) {
+      deep = 0
+    }
+
+    let font = 12 + (deep * 2)
+    if (font >= 24) {
+      font = 24
+    }
+
+    // const fontStr = `normal ${font}px Arial`
+
+    features.forEach(feature => {
+      const style = feature.style[0]
+      const fontStr = style.textStyle.font
+      
+      const boldFont = `${fontStr.split(' ')[0]} ${font}px Arial`
+
+      style.textStyle.font = boldFont
+    })
+
+  }
   
   /**
    * 1、对渲染对象需要做切割 （当前范围内）
@@ -127,7 +165,7 @@ export default class FeatureLayerRenderer extends LayerRenderer {
   
     // 加载当前屏的图形
     const features = this.layer.loadFeature(renderExtent)
-    
+
     this._cacheableThisTime = false
     this._renderFeatures = features
     this._maxExtent = renderExtent
@@ -183,6 +221,7 @@ export default class FeatureLayerRenderer extends LayerRenderer {
        * Render text
        */
       if (feature.textDisplay) {
+        this._calculaterFeaturesFontSize([feature])
         this._textRender.render(feature, feature.style, transform)
       }
     })

@@ -277,7 +277,6 @@ export default class Feature extends BaseObject {
         cloneStyle.color = white
   
         newStyles.unshift(cloneStyle)
-
       } else if (geometryType === Geometry.POLYGON ||
           geometryType === Geometry.MULTI_POLYGON ||
           geometryType === Geometry.PARALLELOGRAM ||
@@ -301,7 +300,11 @@ export default class Feature extends BaseObject {
       }
 
       const textStyle = newStyles[0].textStyle.clone()
-      textStyle.font = 'bold 12px Arial'
+      // textStyle.font = 'bold 12px Arial'
+      const oriFont = textStyle.font
+      const boldFont = `bold ${oriFont.split(' ')[1]} Arial`
+      textStyle.font = boldFont
+      
       newStyles[0].textStyle = textStyle
 
       this.style = newStyles

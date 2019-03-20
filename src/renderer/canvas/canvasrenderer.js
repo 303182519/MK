@@ -76,8 +76,15 @@ export default class CanvasRenderer extends Renderer {
       this._canvas.width = canvasWidth
       this._canvas.height = canvasHeight
     } else {
-      context.clearRect(0,0,canvasWidth,canvasHeight)
+      // context.clearRect(0,0,canvasWidth,canvasHeight)
+
+      this._canvas.width = canvasWidth
+      this._canvas.height = canvasHeight
     }
+
+    
+
+    // context.translate(0.5, 0.5)
 
     const layers = this.map.layers
   
@@ -128,7 +135,7 @@ export default class CanvasRenderer extends Renderer {
     if (layer instanceof SingleImageLayer) {
       return new ImageLayerRenderer(layer,this.context)
     } else if (layer instanceof FeatureLayer) {
-      return new FeatureLayerRenderer(layer,this.context)
+      return new FeatureLayerRenderer(layer, this.context, this.map)
     } else {
       return null
     }

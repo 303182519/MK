@@ -16,8 +16,8 @@ import TextStyle from './textstyle'
  * @constructor
  * @example
  *
- *     var fillStyle = new Datatang.FillStyle([255,255,255],
- *         new Datatang.LineStyle([0,0,255],1,1.25),0.5)
+ *     var fillStyle = new mk.FillStyle([255,255,255],
+ *         new mk.LineStyle([0,0,255],1,1.25),0.5)
  *
  */
 export default class FillStyle extends BaseStyle {
@@ -43,7 +43,7 @@ export default class FillStyle extends BaseStyle {
    * 边框样式对象
    *
    * @property borderStyle
-   * @type {Datatang.LineStyle}
+   * @type {mk.LineStyle}
    */
   get borderStyle () { return this._borderStyle}
   set borderStyle (value) { return this._borderStyle = value }

@@ -14,7 +14,7 @@ import {ExtentUtil} from './support/extentutil'
  * @constructor
  * @example
  *
- *  var rect = new Datatang.Extent(10, 10, 500, 500)
+ *  var rect = new mk.Extent(10, 10, 500, 500)
  */
 export default class Extent extends Geometry {
 
@@ -167,7 +167,8 @@ export default class Extent extends Geometry {
   getFlatInteriorPoint () {
     if (this._flatInteriorPointRevision !== this.revision) {
       this._flatInteriorPointRevision = this.revision
-      this._flatInteriorPoint = [this.centerX, this.centerY]
+      // this._flatInteriorPoint = [this.centerX, this.centerY]
+      this._flatInteriorPoint = [this.xmin, this.ymin]
     }
     
     return this._flatInteriorPoint
@@ -276,8 +277,19 @@ export default class Extent extends Geometry {
    * @param {Number} offsetY y的偏移量
    * @returns {[*,*]}
    */
-  getFormShowPosition (offsetX = 0, offsetY = 0) {
+  getFormShowPosition1 (offsetX = 0, offsetY = 0) {
     return [( this.xmin + this.xmax ) / 2 - offsetX, this.ymin - offsetY]
+  }
+
+  /**
+   * 根据得到的坐标点，计算出表单显示的位置
+   *
+   * @param {Number} offsetX x的偏移量
+   * @param {Number} offsetY y的偏移量
+   * @returns {[*,*]}
+   */
+  getFormShowPosition(offsetX = 0, offsetY = 0) {
+    return [this.xmin - offsetX, this.ymin - offsetY]
   }
   
   /**
